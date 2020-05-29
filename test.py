@@ -29,4 +29,17 @@ for c in s:
     binary_val = bin(ascii_val)
     bin_conv.append(binary_val[2:])
 
-a = ''.join(bin_conv))
+a = ''.join(bin_conv)
+to_be_appended = "01010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"
+b = to_be_appended + str(a) + to_be_appended
+print(b)
+
+f = 8 // 5
+print(f)
+
+s = "abhinav"
+
+for i in range(len(s)):
+    print(s[0])
+    s = s[1:]
+    print(len(s))

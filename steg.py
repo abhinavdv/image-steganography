@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import random
 
 
 def strToBinary(s):
@@ -19,18 +20,27 @@ def strToBinary(s):
 
 
 def encrypt(image, string):
+    to_be_appended = "01010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"
     img = cv2.imread(image, 0)
-    bin_of_str = strToBinary(string)
-
+    _bin = strToBinary(string)
+    bin_of_str = str(_bin)
+    total_size = 256 + len(bin_of_str)
+    bin_to_append = to_be_appended + bin_of_str + to_be_appended
     height, width = img.shape
+    size = height * width
+    rand_no = random.randrange(0, size - total_size - 5, 1)
+    row = rand_no // width
+    col = rand_no % width
+
     for i in range(height):
         for j in range(width):
-            if(img[i][j] <= 244):
-                img[i][j] += 10
-                print(img[i][j])
-            else:
-                img[i][j] -= 20
-                print(img[i][j])
+            if(i >= row and j >= col and len(bin_to_append) != 0):
+                if((bin_to_append[0] == '1' and img[i][j] % 2 == 0) or (bin_to_append[0] == '0' and img[i][j] % 2 == 1)):
+                    if(img[i][j] == 255):
+                        img[i][j] -= 1
+                    else:
+                        img[i][j] += 1
+    return 1
 
 
 if __name__ == "__main__":
