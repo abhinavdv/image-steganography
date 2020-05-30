@@ -20,7 +20,6 @@ def strToBinary(s):
         # convert each char to
         # ASCII value
         ascii_val = ord(c)
-        print(ascii_val)
         if(ascii_val < 64):
             bin_conv.append('0')
             print(bin(0))
@@ -33,52 +32,40 @@ def strToBinary(s):
 
 def encrypt(image, string, extension):
     to_be_appended = "11111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000011111111111111111111111111111111110"
-    img = cv2.imread(image, 0)
+    img = cv2.imread(image, 1)
+    b, g, r = cv2.split(img)
     _bin = strToBinary(string)
     bin_of_str = str(_bin)
-    print(bin_of_str)
     total_size = 256 + len(bin_of_str)
     bin_to_append = to_be_appended + bin_of_str + to_be_appended
-    print(bin_to_append)
-    height, width = img.shape
+    height, width, _tr = img.shape
     size = height * width
     rand_no = random.randrange(0, height - 12, 1)
     row = rand_no
-    col = rand_no % width
-    print(row, col)
+    print(row)
     t = ''
-    w = 0
-    e = 0
     for i in range(row, height):
         for j in range(width):
             if(len(bin_to_append) != 0):
-                if((bin_to_append[0] == '1' and img[i][j] % 2 == 0) or (bin_to_append[0] == '0' and img[i][j] % 2 == 1)):
-                    if(img[i][j] == 255):
-                        img[i][j] -= 1
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+                if((bin_to_append[0] == '1' and b[i][j] % 2 == 0) or (bin_to_append[0] == '0' and b[i][j] % 2 == 1)):
+                    if(b[i][j] == 255):
+                        b[i][j] -= 1
+                        t = t + str((b[i][j] % 2))
 
                     else:
-                        img[i][j] += 1
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+                        b[i][j] += 1
+                        t = t + str((b[i][j] % 2))
 
                 else:
-                    if(img[i][j] >= 254):
-                        img[i][j] -= 2
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+                    if(b[i][j] >= 254):
+                        b[i][j] -= 2
+                        t = t + str((b[i][j] % 2))
                     else:
-                        img[i][j] += 2
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+                        b[i][j] += 2
+                        t = t + str((b[i][j] % 2))
                 bin_to_append = bin_to_append[1:]
-
-    cv2.imwrite('abc.' + extension, img)
+    imag = cv2.merge((b, g, r))
+    cv2.imwrite('abc.' + extension, imag)
     if(len(bin_to_append) == 0):
         return 1
     else:
@@ -87,12 +74,13 @@ def encrypt(image, string, extension):
 
 def decrypt(image):
     appended_front_and_back = "11111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000011111111111111111111111111111111110"
-    img = cv2.imread(image, 0)
-    height, width = img.shape
+    img = cv2.imread(image, 1)
+    b, g, r = cv2.split(img)
+    height, width, _sd = img.shape
     a = ""
     for i in range(height):
         for j in range(width):
-            a = a + str(img[i][j] % 2)
+            a = a + str(b[i][j] % 2)
     print(a.count(appended_front_and_back))
     start_index = a.find(appended_front_and_back)
     start_index = start_index + 128
