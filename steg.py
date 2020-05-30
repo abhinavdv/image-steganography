@@ -4,27 +4,16 @@ import random
 
 
 def BinaryToDecimal(binary):
-
-    # Using int function to convert to
-    # string
     string = int(binary, 2)
-
     return string
 
 
 def strToBinary(s):
     bin_conv = []
-
-    for c in s:
-
-        # convert each char to
-        # ASCII value
-        ascii_val = ord(c)
-        print(ascii_val)
+    for char in string:
+        ascii_val = ord(char)
         if(ascii_val < 64):
             bin_conv.append('0')
-            print(bin(0))
-        # Convert ASCII value to binary
         binary_val = bin(ascii_val)
         bin_conv.append(binary_val[2:])
 
@@ -36,46 +25,29 @@ def encrypt(image, string, extension):
     img = cv2.imread(image, 0)
     _bin = strToBinary(string)
     bin_of_str = str(_bin)
-    print(bin_of_str)
     total_size = 256 + len(bin_of_str)
     bin_to_append = to_be_appended + bin_of_str + to_be_appended
-    print(bin_to_append)
     height, width = img.shape
     size = height * width
     rand_no = random.randrange(0, height - 12, 1)
     row = rand_no
     col = rand_no % width
-    print(row, col)
-    t = ''
-    w = 0
-    e = 0
     for i in range(row, height):
         for j in range(width):
             if(len(bin_to_append) != 0):
                 if((bin_to_append[0] == '1' and img[i][j] % 2 == 0) or (bin_to_append[0] == '0' and img[i][j] % 2 == 1)):
                     if(img[i][j] == 255):
                         img[i][j] -= 1
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
-
                     else:
                         img[i][j] += 1
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
 
                 else:
                     if(img[i][j] >= 254):
                         img[i][j] -= 2
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+
                     else:
                         img[i][j] += 2
-                        t = t + str((img[i][j] % 2))
-                        w = i
-                        e = j
+
                 bin_to_append = bin_to_append[1:]
 
     cv2.imwrite('abc.' + extension, img)
@@ -100,12 +72,10 @@ def decrypt(image):
     end_index = a.find(appended_front_and_back)
     a = a[0:end_index]
     str_data = ''
-    print(a)
     for i in range(0, len(a), 7):
         temp_data = a[i:i + 7]
         decimal_data = BinaryToDecimal(temp_data)
         str_data = str_data + chr(decimal_data)
-        print(temp_data)
     return(str_data)
 
 
@@ -114,7 +84,7 @@ if __name__ == "__main__":
         press 1 to ENCRYPT
         press 2 to DECRYPT
 
-        '''))
+        :'''))
     if e_or_d == 1:
         image = input("Please enter the image you want to encrypt your message in.. : ")
         extension = image.split('.')

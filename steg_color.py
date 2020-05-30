@@ -4,29 +4,18 @@ import random
 
 
 def BinaryToDecimal(binary):
-
-    # Using int function to convert to
-    # string
     string = int(binary, 2)
-
     return string
 
 
-def strToBinary(s):
+def strToBinary(string):
     bin_conv = []
-
-    for c in s:
-
-        # convert each char to
-        # ASCII value
-        ascii_val = ord(c)
+    for char in string:
+        ascii_val = ord(char)
         if(ascii_val < 64):
             bin_conv.append('0')
-            print(bin(0))
-        # Convert ASCII value to binary
         binary_val = bin(ascii_val)
         bin_conv.append(binary_val[2:])
-
     return (''.join(bin_conv))
 
 
@@ -42,7 +31,6 @@ def encrypt(image, string, extension):
     size = height * width
     rand_no = random.randrange(0, height - 12, 1)
     row = rand_no
-    print(row)
     t = ''
     for i in range(row, height):
         for j in range(width):
@@ -55,15 +43,8 @@ def encrypt(image, string, extension):
                     else:
                         b[i][j] += 1
                         t = t + str((b[i][j] % 2))
-
-                else:
-                    if(b[i][j] >= 254):
-                        b[i][j] -= 2
-                        t = t + str((b[i][j] % 2))
-                    else:
-                        b[i][j] += 2
-                        t = t + str((b[i][j] % 2))
                 bin_to_append = bin_to_append[1:]
+
     imag = cv2.merge((b, g, r))
     cv2.imwrite('abc.' + extension, imag)
     if(len(bin_to_append) == 0):
@@ -88,12 +69,11 @@ def decrypt(image):
     end_index = a.find(appended_front_and_back)
     a = a[0:end_index]
     str_data = ''
-    print(a)
+
     for i in range(0, len(a), 7):
         temp_data = a[i:i + 7]
         decimal_data = BinaryToDecimal(temp_data)
         str_data = str_data + chr(decimal_data)
-        print(temp_data)
     return(str_data)
 
 

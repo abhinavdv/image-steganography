@@ -56,6 +56,6 @@ if __name__ == "__main__":
         image = input("Please enter the image you want to decrypt your image from.. : ")
         a = decrypt(image)
         print("Your image has been decrypted Sucessfully")
-        print("Your image has been saved in the same directory as message.png")
+        print("Your image has been saved in the same directory as retrived image.png")
     else:
         print("Please restart and type in either 1 to encrypt an image or 2 to decrypt an image")
