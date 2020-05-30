@@ -102,7 +102,7 @@ if __name__ == "__main__":
         press 1 to ENCRYPT
         press 2 to DECRYPT
 
-        '''))
+        :'''))
     if e_or_d == 1:
         image = input("Please enter the image you want to encrypt your message in.. : ")
         extension = image.split('.')
